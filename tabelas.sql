@@ -54,11 +54,19 @@ CREATE TABLE IF NOT EXISTS aluno (
 );
 
 -- 5. Tabela de Professores
-CREATE TABLE IF NOT EXISTS professor (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS Professor (
+    id_prof INT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    cpf VARCHAR(14) NOT NULL UNIQUE,
-    especialidade VARCHAR(100)
+    rua_av VARCHAR(150),
+    numero VARCHAR(20),
+    bairro VARCHAR(100),
+    cidade VARCHAR(100),
+    estado VARCHAR(50),
+    tel_fixo VARCHAR(20),
+    cel VARCHAR(20),
+    especializacao VARCHAR(255),
+    titulacao VARCHAR(255),
+    data_nasc DATE
 );
 
 -- ==========================================================
@@ -67,11 +75,10 @@ CREATE TABLE IF NOT EXISTS professor (
 
 -- Associação: Curso x Professor (Quais professores ensinam em quais cursos)
 CREATE TABLE IF NOT EXISTS curso_professor (
-    curso_id INT,
-    professor_id INT,
-    PRIMARY KEY (curso_id, professor_id),
-    FOREIGN KEY (curso_id) REFERENCES curso(id) ON DELETE CASCADE,
-    FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
+    cod_curso INT,
+    id_prof INT,
+    PRIMARY KEY (cod_curso, id_prof),
+    FOREIGN KEY (id_prof) REFERENCES Professor(id_prof) ON DELETE CASCADE
 );
 
 -- Associação: Curso x Disciplina (Quais disciplinas pertencem a quais cursos)
