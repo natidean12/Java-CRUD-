@@ -39,18 +39,24 @@ CREATE TABLE IF NOT EXISTS curso (
 );
 
 -- 3. Tabela de Disciplinas
-CREATE TABLE IF NOT EXISTS disciplina (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL UNIQUE,
-    carga_horaria INT NOT NULL
+CREATE TABLE IF NOT EXISTS Disciplina (
+    cod_disc INT PRIMARY KEY,
+    nome_disc VARCHAR(100) NOT NULL,
+    carga_horaria INT NOT NULL,
+    aulas_semana INT NOT NULL
 );
 
 -- 4. Tabela de Alunos
-CREATE TABLE IF NOT EXISTS aluno (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS Aluno (
+    matricula INT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
-    matricula VARCHAR(20) NOT NULL UNIQUE,
-    data_nascimento DATE
+    data_nasc DATE NOT NULL,
+    cod_curso INT,
+    np1 DECIMAL(4,2),
+    np2 DECIMAL(4,2),
+    media DECIMAL(4,2),
+    faltas INT,
+    FOREIGN KEY (cod_curso) REFERENCES Curso(cod_curso) ON DELETE SET NULL
 );
 
 -- 5. Tabela de Professores
@@ -82,12 +88,12 @@ CREATE TABLE IF NOT EXISTS curso_professor (
 );
 
 -- Associação: Curso x Disciplina (Quais disciplinas pertencem a quais cursos)
-CREATE TABLE IF NOT EXISTS curso_disciplina (
-    curso_id INT,
-    disciplina_id INT,
-    PRIMARY KEY (curso_id, disciplina_id),
-    FOREIGN KEY (curso_id) REFERENCES curso(id) ON DELETE CASCADE,
-    FOREIGN KEY (disciplina_id) REFERENCES disciplina(id) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS Curso_Disciplina (
+    cod_curso INT,
+    cod_disc INT,
+    PRIMARY KEY (cod_curso, cod_disc),
+    FOREIGN KEY (cod_curso) REFERENCES Curso(cod_curso) ON DELETE CASCADE,
+    FOREIGN KEY (cod_disc) REFERENCES Disciplina(cod_disc) ON DELETE CASCADE
 );
 
 -- Associação: Professor x Disciplina (Quais disciplinas o professor ministra)
@@ -100,10 +106,14 @@ CREATE TABLE IF NOT EXISTS professor_disciplina (
 );
 
 -- Associação: Aluno x Disciplina (Matrícula do aluno nas disciplinas para gerar notas/gráficos)
-CREATE TABLE IF NOT EXISTS aluno_disciplina (
-    aluno_id INT,
-    disciplina_id INT,
-    PRIMARY KEY (aluno_id, disciplina_id),
-    FOREIGN KEY (aluno_id) REFERENCES aluno(id) ON DELETE CASCADE,
-    FOREIGN KEY (disciplina_id) REFERENCES disciplina(id) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS Aluno_Disciplina (
+    matricula INT,
+    cod_disc INT,
+    np1 DECIMAL(4,2),
+    np2 DECIMAL(4,2),
+    media DECIMAL(4,2),
+    faltas INT,
+    PRIMARY KEY (matricula, cod_disc),
+    FOREIGN KEY (matricula) REFERENCES Aluno(matricula) ON DELETE CASCADE,
+    FOREIGN KEY (cod_disc) REFERENCES Disciplina(cod_disc) ON DELETE CASCADE
 );
